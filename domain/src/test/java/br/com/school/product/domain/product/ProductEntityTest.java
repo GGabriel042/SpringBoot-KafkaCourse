@@ -61,4 +61,28 @@ class ProductEntityTest {
         Assertions.assertEquals(message, expectedError.getErrors().get(0).message());
     }
 
+
+    @Test
+    void shouldInstanceNewProductAndUpdate() {
+        final var expectedSku = "1";
+        final var expectedName = "Product name";
+        final var expectedStock = BigDecimal.valueOf(10);
+        final var expectedCost = BigDecimal.valueOf(20);
+        final var expectedPrice = BigDecimal.valueOf(30);
+
+
+        final var product = ProductEntity.create("123", "name name name", BigDecimal.valueOf(100), BigDecimal.valueOf(100), BigDecimal.valueOf(200));
+
+        product.update(expectedSku, expectedName, expectedStock, expectedCost, expectedPrice);
+
+
+        Assertions.assertNotNull(product.getId());
+        Assertions.assertEquals(expectedSku, product.getSku());
+        Assertions.assertEquals(expectedName, product.getName());
+        Assertions.assertEquals(expectedStock, product.getStock());
+        Assertions.assertEquals(expectedCost, product.getCost());
+        Assertions.assertEquals(expectedPrice, product.getPrice());
+    }
+
+
 }
