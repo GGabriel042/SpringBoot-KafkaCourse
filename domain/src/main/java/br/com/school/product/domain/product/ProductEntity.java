@@ -1,5 +1,8 @@
 package br.com.school.product.domain.product;
 
+import br.com.school.product.domain.exception.NotificationException;
+import br.com.school.product.domain.validation.Error;
+import br.com.school.product.domain.validation.NotificationValidation;
 import lombok.Getter;
 
 import java.math.BigDecimal;
@@ -38,6 +41,31 @@ public class ProductEntity {
     }
 
     private void selfValidate() {
+        final var notification = NotificationValidation.create();
 
+        if (sku.isEmpty()) {
+            notification.append(new Error("Sku cannot be null"));
+        }
+
+        final var nameLength = name.trim().length();
+        if (nameLength < 5 || nameLength > 200) {
+            notification.append(new Error("Name must contain between 5 and 200 characters"));
+        }
+
+        if (stock.compareTo(BigDecimal.ZERO) < 0) {
+            notification.append(new Error("Stock must be positive"));
+        }
+
+        if (cost.compareTo(BigDecimal.ZERO) <= 0) {
+            notification.append(new Error("Cost must be greater than 0"));
+        }
+
+        if (price.compareTo(cost) < 0) {
+            notification.append(new Error("Price must be greater than cost"));
+        }
+
+        if (notification.hasErrors()) {
+            throw new NotificationException("Failed to instance new product", notification);
+        }
     }
 }
