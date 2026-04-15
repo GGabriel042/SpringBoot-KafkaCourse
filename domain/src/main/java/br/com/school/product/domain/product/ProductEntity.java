@@ -37,7 +37,9 @@ public class ProductEntity {
                                        BigDecimal cost,
                                        BigDecimal price) {
         final var id = UUID.randomUUID().toString();
-        return new ProductEntity(id, sku, name, stock, cost, price);
+        final var product = new ProductEntity(id, sku, name, stock, cost, price);
+        product.selfValidate();
+        return product;
     }
 
     public void update(String sku,
@@ -56,7 +58,7 @@ public class ProductEntity {
     private void selfValidate() {
         final var notification = NotificationValidation.create();
 
-        if (sku.isEmpty()) {
+        if (sku == null || sku.isEmpty()) {
             notification.append(new Error("Sku cannot be null"));
         }
 
@@ -73,7 +75,7 @@ public class ProductEntity {
             notification.append(new Error("Cost must be greater than 0"));
         }
 
-        if (price.compareTo(cost) < 0) {
+        if (price.compareTo(cost) <= 0) {
             notification.append(new Error("Price must be greater than cost"));
         }
 
