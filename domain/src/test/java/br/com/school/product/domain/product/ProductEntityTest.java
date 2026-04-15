@@ -70,7 +70,7 @@ class ProductEntityTest {
         final var expectedCost = BigDecimal.valueOf(20);
         final var expectedPrice = BigDecimal.valueOf(30);
 
-        
+
         final var product = ProductEntity.create("123", "name name name", BigDecimal.valueOf(100), BigDecimal.valueOf(100), BigDecimal.valueOf(200));
 
 
@@ -88,5 +88,23 @@ class ProductEntityTest {
         Assertions.assertEquals(expectedPrice, product.getPrice());
     }
 
+
+    @ParameterizedTest
+    @MethodSource("getPossiblesOfValueProduct")
+    void shouldInstanceNewProductAndNotUpdate(String sku,
+                                              String name,
+                                              BigDecimal stock,
+                                              BigDecimal cost,
+                                              BigDecimal price,
+                                              String message) {
+
+
+        final var product = ProductEntity.create("123", "name name name", BigDecimal.valueOf(100), BigDecimal.valueOf(100), BigDecimal.valueOf(200));
+
+
+        final var expectedError = Assertions.assertThrows(NotificationException.class, () -> product.update(sku, name, stock, cost, price));
+
+        Assertions.assertEquals(message, expectedError.getErrors().get(0).message());
+    }
 
 }
