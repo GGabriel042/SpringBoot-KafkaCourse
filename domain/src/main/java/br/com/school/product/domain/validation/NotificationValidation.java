@@ -22,4 +22,8 @@ public class NotificationValidation {
         errors.add(error);
         return this;
     }
+
+    public boolean hasErrors() {
+        return !errors.isEmpty();
+    }
 }
