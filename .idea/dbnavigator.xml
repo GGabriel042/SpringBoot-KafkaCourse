@@ -4,9 +4,17 @@
     <mappings />
     <preferences />
   </component>
+  <component name="DBNavigator.Project.DataEditorManager">
+    <record-view-column-sorting-type value="BY_INDEX" />
+    <value-preview-text-wrapping value="true" />
+    <value-preview-pinned value="false" />
+  </component>
   <component name="DBNavigator.Project.DatabaseAssistantManager">
     <assistants>
       <assistant-state connection-id="725cd8d4-5f73-45a4-b581-9f365c0ac6b3" assistant-type="PUBLIC" default-profile-name="" selected-chat-id="" availability="AVAILABLE" acknowledgement="NONE" selected="true">
+        <tools />
+      </assistant-state>
+      <assistant-state connection-id="725cd8d4-5f73-45a4-b581-9f365c0ac6b3" assistant-type="SELECT_AI" default-profile-name="" selected-chat-id="" availability="UNAVAILABLE" acknowledgement="NONE">
         <tools />
       </assistant-state>
     </assistants>
@@ -22,11 +30,25 @@
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="725cd8d4-5f73-45a4-b581-9f365c0ac6b3">
-      <console name="Connection" type="STANDARD" schema="product_db" session="Main" />
+      <console name="Connection" type="STANDARD" schema="product_db" session="Pool"><![CDATA[select * from product]]></console>
     </connection>
   </component>
+  <component name="DBNavigator.Project.DatabaseEditorStateManager">
+    <last-used-providers />
+  </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
-    <open-files />
+    <open-files>
+      <object connection-id="725cd8d4-5f73-45a4-b581-9f365c0ac6b3" object-ref="consoles/Connection" />
+    </open-files>
+  </component>
+  <component name="DBNavigator.Project.DatabasePrerequisiteManager">
+    <prerequisites />
+  </component>
+  <component name="DBNavigator.Project.DatabaseSessionManager">
+    <connection id="725cd8d4-5f73-45a4-b581-9f365c0ac6b3" />
+  </component>
+  <component name="DBNavigator.Project.ExecutionManager">
+    <retain-sticky-names value="false" />
   </component>
   <component name="DBNavigator.Project.ObjectQuickFilterManager">
     <last-used-operator value="EQUAL" />
@@ -40,7 +62,7 @@
           <description value="Product" />
           <database-type value="MYSQL" />
           <config-type value="BASIC" />
-          <database-version value="9.2" />
+          <database-version value="9.6" />
           <driver-source value="BUNDLED" />
           <driver-library value="" />
           <driver value="" />
@@ -64,7 +86,7 @@
           <azure-token-tenant-id value="" />
           <azure-token-client-id value="" />
           <azure-token-client-certificate-file value="" />
-          <session-user value="root@172.21.0.1" />
+          <session-user value="root@172.18.0.1" />
         </database>
         <properties>
           <auto-commit value="false" />
@@ -588,5 +610,9 @@
         </visibility-settings>
       </environment>
     </general-settings>
+  </component>
+  <component name="DBNavigator.Project.StatementExecutionManager">
+    <execution-variables />
+    <execution-variable-types />
   </component>
 </project>
