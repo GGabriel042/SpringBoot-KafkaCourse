@@ -40,6 +40,19 @@ public class ProductEntity {
         return new ProductEntity(id, sku, name, stock, cost, price);
     }
 
+    public void update(String sku,
+                       String name,
+                       BigDecimal stock,
+                       BigDecimal cost,
+                       BigDecimal price) {
+        this.sku = sku;
+        this.name = name;
+        this.stock = stock;
+        this.cost = cost;
+        this.price = price;
+        selfValidate();
+    }
+
     private void selfValidate() {
         final var notification = NotificationValidation.create();
 
