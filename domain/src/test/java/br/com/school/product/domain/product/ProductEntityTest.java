@@ -49,6 +49,32 @@ class ProductEntityTest {
     }
 
 
+    @Test
+    void shouldNotInstanceNewProductWhenValuesAreNull() {
+        final var expectedSku = "1";
+        final var expectedName = "Product name";
+        final var expectedStock = BigDecimal.valueOf(10);
+        final var expectedCost = BigDecimal.valueOf(20);
+        final var expectedPrice = BigDecimal.valueOf(30);
+
+
+        final var expectedErrorSku = Assertions.assertThrows(NotificationException.class, () -> ProductEntity.create(null, expectedName, expectedStock, expectedCost, expectedPrice));
+        Assertions.assertEquals("Sku cannot be null", expectedErrorSku.getMessage());
+
+        final var expectedErrorName = Assertions.assertThrows(NotificationException.class, () -> ProductEntity.create(expectedSku, null, expectedStock, expectedCost, expectedPrice));
+        Assertions.assertEquals("Name cannot be null", expectedErrorName.getMessage());
+
+        final var expectedErrorStock = Assertions.assertThrows(NotificationException.class, () -> ProductEntity.create(expectedSku, expectedName, null, expectedCost, expectedPrice));
+        Assertions.assertEquals("Stock cannot be null", expectedErrorStock.getMessage());
+
+        final var expectedErrorCost = Assertions.assertThrows(NotificationException.class, () -> ProductEntity.create(expectedSku, expectedName, expectedStock, null, expectedPrice));
+        Assertions.assertEquals("Cost cannot be null", expectedErrorCost.getMessage());
+
+        final var expectedErrorPrice = Assertions.assertThrows(NotificationException.class, () -> ProductEntity.create(expectedSku, expectedName, expectedStock, expectedCost, null));
+        Assertions.assertEquals("Price cannot be null", expectedErrorPrice.getMessage());
+    }
+
+
     private static Stream<Arguments> getPossiblesOfValueProduct() {
 
         final var bigText = "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901";
