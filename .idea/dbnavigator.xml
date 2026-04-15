@@ -5,7 +5,11 @@
     <preferences />
   </component>
   <component name="DBNavigator.Project.DatabaseAssistantManager">
-    <assistants />
+    <assistants>
+      <assistant-state connection-id="725cd8d4-5f73-45a4-b581-9f365c0ac6b3" assistant-type="PUBLIC" default-profile-name="" selected-chat-id="" availability="AVAILABLE" acknowledgement="NONE" selected="true">
+        <tools />
+      </assistant-state>
+    </assistants>
     <selection-state>
       <model-selection />
     </selection-state>

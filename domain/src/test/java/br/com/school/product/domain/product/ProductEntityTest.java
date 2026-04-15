@@ -32,6 +32,23 @@ class ProductEntityTest {
     }
 
 
+    @Test
+    void shouldInstanceNewProductWithAllErrors() {
+        final var expectedSku = "";
+        final var expectedName = "Prod";
+        final var expectedStock = BigDecimal.valueOf(-1);
+        final var expectedCost = BigDecimal.valueOf(0);
+        final var expectedPrice = BigDecimal.valueOf(0);
+        final var expectedTotalErros = 5;
+
+
+        final var expectedError = Assertions.assertThrows(NotificationException.class, () -> ProductEntity.create(expectedSku, expectedName, expectedStock, expectedCost, expectedPrice));
+
+        Assertions.assertNotNull(expectedError);
+        Assertions.assertEquals(expectedTotalErros, expectedError.getErrors().size());
+    }
+
+
     private static Stream<Arguments> getPossiblesOfValueProduct() {
 
         final var bigText = "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901";
