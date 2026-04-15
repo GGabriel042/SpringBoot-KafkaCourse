@@ -6,6 +6,7 @@ import br.com.school.product.domain.validation.NotificationValidation;
 import lombok.Getter;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.UUID;
 
 @Getter
@@ -23,12 +24,12 @@ public class ProductEntity {
                           BigDecimal stock,
                           BigDecimal cost,
                           BigDecimal price) {
-        this.id = id;
-        this.sku = sku;
-        this.name = name;
-        this.stock = stock;
-        this.cost = cost;
-        this.price = price;
+        this.id = Objects.requireNonNull(id, "Id cannot be null");
+        this.sku = Objects.requireNonNull(sku, "Sku cannot be null");
+        this.name = Objects.requireNonNull(name, "Name cannot be null");
+        this.stock = Objects.requireNonNull(stock, "Stock cannot be null");
+        this.cost = Objects.requireNonNull(cost, "Cost cannot be null");
+        this.price = Objects.requireNonNull(price, "Price cannot be null");
     }
 
     public static ProductEntity create(String sku,
