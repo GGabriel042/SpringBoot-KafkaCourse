@@ -70,13 +70,17 @@ class ProductEntityTest {
         final var expectedCost = BigDecimal.valueOf(20);
         final var expectedPrice = BigDecimal.valueOf(30);
 
-
+        
         final var product = ProductEntity.create("123", "name name name", BigDecimal.valueOf(100), BigDecimal.valueOf(100), BigDecimal.valueOf(200));
+
+
+        final var id = product.getId();
 
         product.update(expectedSku, expectedName, expectedStock, expectedCost, expectedPrice);
 
 
         Assertions.assertNotNull(product.getId());
+        Assertions.assertEquals(id, product.getId());
         Assertions.assertEquals(expectedSku, product.getSku());
         Assertions.assertEquals(expectedName, product.getName());
         Assertions.assertEquals(expectedStock, product.getStock());
