@@ -1,5 +1,6 @@
 package br.com.school.product.domain.exception;
 
+import br.com.school.product.domain.validation.Error;
 import lombok.Getter;
 
 import java.util.List;
