@@ -7,8 +7,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -158,5 +161,28 @@ class ProductServiceTest {
 
         verify(repository, times(1)).findById("1");
         verify(repository, never()).delete(any());
+    }
+
+
+    @Test
+    void shouldFindAll() {
+        final var expectedSku = "1";
+        final var expectedName = "Product name";
+        final var expectedStock = BigDecimal.valueOf(10);
+        final var expectedCost = BigDecimal.valueOf(20);
+        final var expectedPrice = BigDecimal.valueOf(30);
+
+        final var product = ProductEntity.create(expectedSku, expectedName, expectedStock, expectedCost, expectedPrice);
+
+
+        final var page = new PageImpl<ProductEntity>(List.of(product));
+
+        when(repository.findAll(any(Pageable.class))).thenReturn(page);
+
+
+        final var list = service.findAllProducts(Pageable.ofSize(1));
+
+
+        verify(repository, times(1)).findAll(any(Pageable.class));
     }
 }
