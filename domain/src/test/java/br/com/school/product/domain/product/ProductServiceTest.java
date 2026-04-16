@@ -138,9 +138,25 @@ class ProductServiceTest {
 
         service.deleteProduct("1");
 
-        verify(repository, times(1))
-                .findById("1");
+        verify(repository, times(1)).findById("1");
 
         verify(repository, times(1)).delete(any());
+    }
+
+
+    @Test
+    void shouldNotDeleteProductWhenProductNotFound() {
+
+        final var expectedMessageError = "Product with id 1 not found";
+
+        when(repository.findById(any())).thenReturn(Optional.empty());
+
+        final var exception = Assertions.assertThrows(NotFoundException.class,
+                () -> service.deleteProduct("1"));
+
+        Assertions.assertEquals(expectedMessageError, exception.getMessage());
+
+        verify(repository, times(1)).findById("1");
+        verify(repository, never()).delete(any());
     }
 }
