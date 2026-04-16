@@ -1,5 +1,6 @@
 package br.com.school.product.domain.product;
 
+import br.com.school.product.domain.exception.NotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -100,6 +101,22 @@ class ProductServiceTest {
                         && Objects.equals(expectedCost, actualProduct.getCost())
                         && Objects.equals(expectedPrice, actualProduct.getPrice())
         );
+
+        Mockito.verify(repository, times(1))
+                .findById("1");
+    }
+
+    @Test
+    void shouldNotReturnProductGetByIdWhenProductNotFound() {
+
+        final var expectedMessageError = "Product with id 1 not found";
+
+        when(repository.findById(any())).thenReturn(Optional.empty());
+
+        final var exception = Assertions.assertThrows(NotFoundException.class,
+                () -> service.getProductById("1"));
+
+        Assertions.assertEquals(expectedMessageError, exception.getMessage());
 
         Mockito.verify(repository, times(1))
                 .findById("1");
