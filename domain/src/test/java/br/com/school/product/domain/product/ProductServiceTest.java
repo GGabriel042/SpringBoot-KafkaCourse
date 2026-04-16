@@ -1,5 +1,6 @@
 package br.com.school.product.domain.product;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -9,6 +10,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.util.Objects;
+import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 
@@ -73,5 +75,33 @@ class ProductServiceTest {
                         && Objects.equals(expectedStock, arg.getStock())
                         && Objects.equals(expectedCost, arg.getCost())
                         && Objects.equals(expectedPrice, arg.getPrice())));
+    }
+
+
+    @Test
+    void shouldReturnProductGetById() {
+        final var expectedSku = "1";
+        final var expectedName = "Product name";
+        final var expectedStock = BigDecimal.valueOf(10);
+        final var expectedCost = BigDecimal.valueOf(20);
+        final var expectedPrice = BigDecimal.valueOf(30);
+
+
+        final var product = ProductEntity.create(expectedSku, expectedName, expectedStock, expectedCost, expectedPrice);
+
+        when(repository.findById(any())).thenReturn(Optional.of(product));
+
+        final var actualProduct = service.getProductById("1");
+
+        Assertions.assertTrue(
+                Objects.equals(expectedSku, actualProduct.getSku())
+                        && Objects.equals(expectedName, actualProduct.getName())
+                        && Objects.equals(expectedStock, actualProduct.getStock())
+                        && Objects.equals(expectedCost, actualProduct.getCost())
+                        && Objects.equals(expectedPrice, actualProduct.getPrice())
+        );
+
+        Mockito.verify(repository, times(1))
+                .findById("1");
     }
 }
