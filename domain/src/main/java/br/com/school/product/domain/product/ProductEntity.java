@@ -52,6 +52,30 @@ public class ProductEntity {
         return product;
     }
 
+    public static ProductEntity with(ProductEntity productSource) {
+        return with(
+                productSource.getId(),
+                productSource.getSku(),
+                productSource.getName(),
+                productSource.getStock(),
+                productSource.getCost(),
+                productSource.getPrice());
+    }
+
+    public static ProductEntity with(String id,
+                                     String sku,
+                                     String name,
+                                     BigDecimal stock,
+                                     BigDecimal cost,
+                                     BigDecimal price) {
+        return new ProductEntity(id,
+                sku,
+                name,
+                stock,
+                cost,
+                price);
+    }
+
     public void update(String sku,
                        String name,
                        BigDecimal stock,
@@ -64,6 +88,7 @@ public class ProductEntity {
         this.price = price;
         selfValidate();
     }
+
 
     private void selfValidate() {
         final var notification = NotificationValidation.create();
