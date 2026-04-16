@@ -180,7 +180,10 @@ class ProductServiceTest {
         when(repository.findAll(any(Pageable.class))).thenReturn(page);
 
 
-        final var list = service.findAllProducts(Pageable.ofSize(1));
+        final var pageReturn = service.findAllProducts(Pageable.ofSize(1));
+
+        Assertions.assertNotNull(pageReturn);
+        Assertions.assertEquals(product.getId(), pageReturn.get().toList().get(0).getId());
 
 
         verify(repository, times(1)).findAll(any(Pageable.class));
