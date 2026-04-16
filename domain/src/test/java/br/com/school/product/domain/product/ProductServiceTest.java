@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
@@ -39,7 +38,7 @@ class ProductServiceTest {
 
         service.createProduct(product);
 
-        Mockito.verify(repository, times(1))
+        verify(repository, times(1))
                 .save(argThat(arg -> Objects.equals(expectedSku, arg.getSku())
                         && Objects.equals(expectedName, arg.getName())
                         && Objects.equals(expectedStock, arg.getStock())
@@ -70,7 +69,7 @@ class ProductServiceTest {
 
         service.updateProduct(productFromBd, product);
 
-        Mockito.verify(repository, times(1))
+        verify(repository, times(1))
                 .save(argThat(arg -> Objects.equals(expectedSku, arg.getSku())
                         && Objects.equals(expectedName, arg.getName())
                         && Objects.equals(expectedStock, arg.getStock())
@@ -102,7 +101,7 @@ class ProductServiceTest {
                         && Objects.equals(expectedPrice, actualProduct.getPrice())
         );
 
-        Mockito.verify(repository, times(1))
+        verify(repository, times(1))
                 .findById("1");
     }
 
@@ -118,7 +117,30 @@ class ProductServiceTest {
 
         Assertions.assertEquals(expectedMessageError, exception.getMessage());
 
-        Mockito.verify(repository, times(1))
+        verify(repository, times(1))
                 .findById("1");
+    }
+
+    @Test
+    void shouldDeleteProduct() {
+        final var expectedSku = "1";
+        final var expectedName = "Product name";
+        final var expectedStock = BigDecimal.valueOf(10);
+        final var expectedCost = BigDecimal.valueOf(20);
+        final var expectedPrice = BigDecimal.valueOf(30);
+
+
+        final var product = ProductEntity.create(expectedSku, expectedName, expectedStock, expectedCost, expectedPrice);
+
+        when(repository.findById(any())).thenReturn(Optional.of(product));
+
+        doNothing().when(repository).delete(any());
+
+        service.deleteProduct("1");
+
+        verify(repository, times(1))
+                .findById("1");
+
+        verify(repository, times(1)).delete(any());
     }
 }
