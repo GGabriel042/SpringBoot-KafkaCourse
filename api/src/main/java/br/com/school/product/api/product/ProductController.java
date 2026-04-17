@@ -35,6 +35,18 @@ public class ProductController {
         return ResponseEntity.ok(response);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<ProductResponse> updateProduct(
+            @PathVariable String id,
+            @RequestBody ProductRequest request) {
+
+        final var productFromBd = service.getProductById(id);
+        final var productToUpdate = request.toEntity(id);
+        final var saveProduct = service.updateProduct(productFromBd, productToUpdate);
+        final var responseProduct = ProductResponse.fromEntity(saveProduct);
+        return ResponseEntity.status(HttpStatus.OK).body(responseProduct);
+    }
+
 
     @GetMapping
     public ResponseEntity<Page<ProductResponse>> getALlProducts(Pageable pageable) {
