@@ -47,6 +47,11 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.OK).body(responseProduct);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ProductResponse> deleteById(@PathVariable String id) {
+        service.deleteProduct(id);
+        return ResponseEntity.noContent().build();
+    }
 
     @GetMapping
     public ResponseEntity<Page<ProductResponse>> getALlProducts(Pageable pageable) {
