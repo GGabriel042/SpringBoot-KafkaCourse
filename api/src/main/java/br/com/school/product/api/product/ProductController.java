@@ -29,6 +29,14 @@ public class ProductController {
 
 
     @GetMapping
+    public ResponseEntity<ProductResponse> getById(@PathVariable String id) {
+        final var product = service.getProductById(id);
+        final var response = ProductResponse.fromEntity(product);
+        return ResponseEntity.ok(response);
+    }
+
+
+    @GetMapping
     public ResponseEntity<Page<ProductResponse>> getALlProducts(Pageable pageable) {
         final var products = service.findAllProducts(pageable);
         final var responsePage = products.map(ProductResponse::fromEntity);
