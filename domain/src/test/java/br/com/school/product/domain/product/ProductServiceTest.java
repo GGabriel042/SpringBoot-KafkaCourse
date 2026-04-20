@@ -1,11 +1,14 @@
 package br.com.school.product.domain.product;
 
 import br.com.school.product.domain.exception.NotFoundException;
+import br.com.school.product.domain.kafka.product.EventType;
+import br.com.school.product.domain.kafka.product.ProductProducer;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +27,8 @@ class ProductServiceTest {
     private ProductService service;
     @Mock
     private ProductRepository repository;
+    @Mock
+    private ProductProducer producer;
 
 
     @Test
@@ -37,7 +42,12 @@ class ProductServiceTest {
 
         final var product = ProductEntity.create(expectedSku, expectedName, expectedStock, expectedCost, expectedPrice);
 
+        final var expectedId = product.getId();
+        final var expectedEventType = EventType.CREATE;
+
+
         when(repository.save(any())).thenReturn(product);
+        Mockito.doNothing().when(producer).sendProduct(any());
 
         service.createProduct(product);
 
@@ -47,6 +57,13 @@ class ProductServiceTest {
                         && Objects.equals(expectedStock, arg.getStock())
                         && Objects.equals(expectedCost, arg.getCost())
                         && Objects.equals(expectedPrice, arg.getPrice())));
+
+        verify(producer, times(1))
+                .sendProduct(argThat(arg -> Objects.equals(expectedSku, arg.sku())
+                        && Objects.equals(expectedName, arg.name())
+                        && Objects.equals(expectedStock, arg.stock())
+                        && Objects.equals(expectedId, arg.id())
+                        && Objects.equals(expectedEventType, arg.eventType())));
     }
 
 
