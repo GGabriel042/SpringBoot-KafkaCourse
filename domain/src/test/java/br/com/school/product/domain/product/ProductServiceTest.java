@@ -162,6 +162,10 @@ class ProductServiceTest {
 
         final var product = ProductEntity.create(expectedSku, expectedName, expectedStock, expectedCost, expectedPrice);
 
+        final var expectedId = product.getId();
+        final var expectedEventType = EventType.DELETE;
+
+
         when(repository.findById(any())).thenReturn(Optional.of(product));
 
         doNothing().when(repository).delete(any());
@@ -170,8 +174,14 @@ class ProductServiceTest {
         service.deleteProduct("1");
 
         verify(repository, times(1)).findById("1");
-
         verify(repository, times(1)).delete(any());
+
+        verify(producer, times(1))
+                .sendProduct(argThat(arg -> Objects.equals(expectedSku, arg.sku())
+                        && Objects.equals(expectedName, arg.name())
+                        && Objects.equals(expectedStock, arg.stock())
+                        && Objects.equals(expectedId, arg.id())
+                        && Objects.equals(expectedEventType, arg.eventType())));
     }
 
 
