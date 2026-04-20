@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -47,7 +46,7 @@ class ProductServiceTest {
 
 
         when(repository.save(any())).thenReturn(product);
-        Mockito.doNothing().when(producer).sendProduct(any());
+        doNothing().when(producer).sendProduct(any());
 
         service.createProduct(product);
 
@@ -78,6 +77,9 @@ class ProductServiceTest {
 
         final var productFromBd = ProductEntity.create("123", "expectedName", BigDecimal.valueOf(10), BigDecimal.valueOf(15), BigDecimal.valueOf(30));
 
+        final var expectedId = productFromBd.getId();
+        final var expectedEventType = EventType.UPDATE;
+
         final var product = ProductEntity.with(productFromBd.getId(),
                 expectedSku,
                 expectedName,
@@ -86,6 +88,7 @@ class ProductServiceTest {
                 expectedPrice);
 
         when(repository.save(any())).thenReturn(product);
+        doNothing().when(producer).sendProduct(any());
 
         service.updateProduct(productFromBd, product);
 
@@ -95,6 +98,13 @@ class ProductServiceTest {
                         && Objects.equals(expectedStock, arg.getStock())
                         && Objects.equals(expectedCost, arg.getCost())
                         && Objects.equals(expectedPrice, arg.getPrice())));
+
+        verify(producer, times(1))
+                .sendProduct(argThat(arg -> Objects.equals(expectedSku, arg.sku())
+                        && Objects.equals(expectedName, arg.name())
+                        && Objects.equals(expectedStock, arg.stock())
+                        && Objects.equals(expectedId, arg.id())
+                        && Objects.equals(expectedEventType, arg.eventType())));
     }
 
 
@@ -155,6 +165,7 @@ class ProductServiceTest {
         when(repository.findById(any())).thenReturn(Optional.of(product));
 
         doNothing().when(repository).delete(any());
+        doNothing().when(producer).sendProduct(any());
 
         service.deleteProduct("1");
 
