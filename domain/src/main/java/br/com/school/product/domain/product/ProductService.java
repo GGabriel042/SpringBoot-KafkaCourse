@@ -24,7 +24,9 @@ public class ProductService {
 
     public ProductEntity updateProduct(ProductEntity productFromBd, ProductEntity product) {
         productFromBd.update(product.getSku(), product.getName(), product.getStock(), product.getCost(), product.getPrice());
-        return repository.save(productFromBd);
+        final var savedProduct = repository.save(productFromBd);
+        producer.sendProduct(ProductEvent.create(savedProduct, EventType.UPDATE));
+        return savedProduct;
     }
 
     public ProductEntity getProductById(String id) {
@@ -35,6 +37,7 @@ public class ProductService {
     public void deleteProduct(String id) {
         final var productFromBd = getProductById(id);
         repository.delete(productFromBd);
+        producer.sendProduct(ProductEvent.create(productFromBd, EventType.DELETE));
     }
 
     public Page<ProductEntity> findAllProducts(Pageable pageable) {
